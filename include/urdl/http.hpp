@@ -412,6 +412,80 @@ private:
   std::string value_;
 };
 
+/// Option to specify the cookie.
+/**
+ * @par Remarks
+ * The default is to not specify the cookie.
+ *
+ * @par Example
+ * To set the cookie for an object of class @c urdl::istream:
+ * @code
+ * urdl::istream is;
+ * is.set_option(urdl::http::cookie("name=value; name2=value2"));
+ * is.open("http://www.boost.org");
+ * @endcode
+ *
+ * To set the cookie for an object of class @c urdl::read_stream:
+ * @code
+ * urdl::read_stream stream;
+ * stream.set_option(urdl::http::cookie("name=value; name2=value2"));
+ * stream.open("http://www.boost.org");
+ * @endcode
+ *
+ * @par Requirements
+ * @e Header: @c <urdl/http.hpp> @n
+ * @e Namespace: @c urdl::http
+ */
+class cookie
+{
+public:
+  /// Constructs an object of class @c cookie.
+  /**
+   * @par Remarks
+   * Postcondition: <tt>value() == ""</tt>.
+   */
+  cookie()
+    : value_("")
+  {
+  }
+
+  /// Constructs an object of class @c cookie.
+  /**
+   * @param v The desired value for the option.
+   *
+   * @par Remarks
+   * Postcondition: <tt>value() == v</tt>
+   */
+  explicit cookie(const std::string& v)
+    : value_(v)
+  {
+  }
+
+  /// Gets the value of the option.
+  /**
+   * @returns The value of the option.
+   */
+  std::string value() const
+  {
+    return value_;
+  }
+
+  /// Sets the value of the option.
+  /**
+   * @param v The desired value for the option.
+   *
+   * @par Remarks
+   * Postcondition: <tt>value() == v</tt>
+   */
+  void value(const std::string& v)
+  {
+    value_ = v;
+  }
+
+private:
+  std::string value_;
+};
+
 namespace errc {
 
 /// HTTP error codes.
