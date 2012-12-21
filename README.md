@@ -1,4 +1,4 @@
 urdl
 ====
 
-urdl
+just urdl a clone
