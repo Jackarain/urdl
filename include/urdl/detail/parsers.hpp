@@ -16,6 +16,8 @@
 #include <cstdlib>
 #include <string>
 
+#include <boost/algorithm/string.hpp>
+
 #include "urdl/detail/abi_prefix.hpp"
 
 namespace urdl {
