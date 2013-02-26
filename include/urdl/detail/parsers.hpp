@@ -267,7 +267,15 @@ bool parse_http_headers(Iterator begin, Iterator end,
         name.push_back(c);
       break;
     case space_before_header_value:
-      state = (c == ' ') ? header_value : fail;
+      if (c == ' ')
+        state = header_value;
+      else if (is_ctl(c))
+        state = fail;
+      else
+      {
+        value.push_back(c);
+        state = header_value;
+      }
       break;
     case header_value:
       if (c == '\r')
