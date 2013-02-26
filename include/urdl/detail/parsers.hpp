@@ -16,6 +16,8 @@
 #include <cstdlib>
 #include <string>
 
+#include <boost/algorithm/string.hpp>
+
 #include "urdl/detail/abi_prefix.hpp"
 
 namespace urdl {
@@ -227,6 +229,8 @@ bool parse_http_headers(Iterator begin, Iterator end,
     case header_line_start:
       if (c == '\r')
       {
+        boost::trim(name);
+        boost::trim(value);
         check_header(name, value, content_type, content_length, location);
         name.clear();
         value.clear();
@@ -238,6 +242,8 @@ bool parse_http_headers(Iterator begin, Iterator end,
         state = fail;
       else
       {
+        boost::trim(name);
+        boost::trim(value);
         check_header(name, value, content_type, content_length, location);
         name.clear();
         value.clear();
