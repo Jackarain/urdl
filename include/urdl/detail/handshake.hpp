@@ -72,8 +72,10 @@ inline bool certificate_matches_host(X509* cert, const std::string& host)
         for (j = 0; host[j] && cert_host[j]; ++j)
           if (std::tolower(host[j]) != std::tolower(cert_host[j]))
             break;
-        if (host[j] == 0 && cert_host[j] == 0)
+        if (host[j] == 0 && cert_host[j] == 0) {
+          GENERAL_NAMES_free(gens);
           return true;
+        }
       }
     }
     else if (gen->type == GEN_IPADD && is_address)
@@ -85,19 +87,25 @@ inline bool certificate_matches_host(X509* cert, const std::string& host)
         {
           boost::asio::ip::address_v4::bytes_type address_bytes
             = address.to_v4().to_bytes();
-          if (std::memcmp(address_bytes.data(), ip_address->data, 4) == 0)
+          if (std::memcmp(address_bytes.data(), ip_address->data, 4) == 0) {
+            GENERAL_NAMES_free(gens);
             return true;
+          }
         }
         else if (address.is_v6() && ip_address->length == 16)
         {
           boost::asio::ip::address_v6::bytes_type address_bytes
             = address.to_v6().to_bytes();
-          if (std::memcmp(address_bytes.data(), ip_address->data, 16) == 0)
+          if (std::memcmp(address_bytes.data(), ip_address->data, 16) == 0) {
+            GENERAL_NAMES_free(gens);
             return true;
+          }
         }
       }
     }
   }
+
+  GENERAL_NAMES_free(gens);
 
   // No match in the alternate names, so try the common names.
   X509_NAME* name = X509_get_subject_name(cert);
