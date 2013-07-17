@@ -115,6 +115,7 @@ istreambuf* istreambuf::open(const url& u)
 
   init_buffers();
   body_->read_stream_.close(body_->error_);
+  body_->error_ = boost::system::error_code();
 
   detail::istreambuf_open_handler oh = { body_->error_, body_->timer_ };
   body_->read_stream_.async_open(u, oh);
@@ -128,7 +129,12 @@ istreambuf* istreambuf::open(const url& u)
   body_->io_service_.run();
 
   if (!body_->read_stream_.is_open())
-    body_->error_ = make_error_code(boost::system::errc::timed_out);
+  {
+    if (body_->error_ == boost::system::error_code())
+	{
+      body_->error_ = make_error_code(boost::system::errc::timed_out);
+	}
+  }
 
   return !body_->error_ ? this : 0;
 }
